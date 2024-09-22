@@ -1,0 +1,88 @@
+<div class="container">
+  <h1>Requests</h1>
+
+  <!-- Material Table -->
+  <table mat-table [dataSource]="requests" class="mat-elevation-z8">
+    <!-- Full Name Column -->
+    <ng-container matColumnDef="fullName">
+      <th mat-header-cell *matHeaderCellDef> Full Name </th>
+      <td mat-cell *matCellDef="let request"> {{request.fullName}} </td>
+    </ng-container>
+
+    <!-- Request Type Column -->
+    <ng-container matColumnDef="idProcess">
+      <th mat-header-cell *matHeaderCellDef> Request Type </th>
+      <td mat-cell *matCellDef="let request"> {{ getWorkflowTitle(request.idProcess) }} </td>
+    </ng-container>
+
+    <!-- Object Column -->
+    <ng-container matColumnDef="object">
+      <th mat-header-cell *matHeaderCellDef> Object </th>
+      <td mat-cell *matCellDef="let request"> {{request.object}} </td>
+    </ng-container>
+
+    <!-- Added Date Column -->
+    <ng-container matColumnDef="addedDateRequest">
+      <th mat-header-cell *matHeaderCellDef> Added Date </th>
+      <td mat-cell *matCellDef="let request"> {{ request.addedDateRequest | date:'short' }} </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let request">
+        <button mat-raised-button color="primary" (click)="updateRequest(request)">Edit</button>
+        <button mat-raised-button color="warn" (click)="deleteRequest(request.idRequest)">Delete</button>
+        <button mat-raised-button color="accent" (click)="completeTask()">Complete Task</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"></tr>
+  </table>
+
+  <!-- Add New Request Button -->
+  <button mat-raised-button color="primary" (click)="showDialogToAdd()">Add New Request</button>
+
+  <!-- Dialog for Adding/Editing Request -->
+  <mat-dialog-content *ngIf="displayDialog">
+    <h2 mat-dialog-title>{{ isNewRequest ? 'Add New Request' : 'Edit Request' }}</h2>
+    <mat-form-field>
+      <mat-label>Request Type</mat-label>
+      <mat-select [(value)]="newRequest.idProcess">
+        <mat-option *ngFor="let workflow of workflows" [value]="workflow.idProcess">{{ workflow.title }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Full Name</mat-label>
+      <input matInput [(ngModel)]="newRequest.fullName" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Object</mat-label>
+      <textarea matInput [(ngModel)]="newRequest.object"></textarea>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Added Date</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="newRequest.addedDateRequest" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-dialog-actions>
+      <button mat-raised-button color="primary" (click)="isNewRequest ? createRequest() : updateRequest(selectedRequest)">Save</button>
+      <button mat-raised-button color="warn" (click)="cancelEdit()">Cancel</button>
+    </mat-dialog-actions>
+  </mat-dialog-content>
+  
+  <!-- Dialog for Completing Task -->
+  <mat-dialog-content *ngIf="displayCompleteDialog">
+    <h2 mat-dialog-title>Complete Task</h2>
+    <mat-form-field>
+      <mat-label>Process Instance ID</mat-label>
+      <input matInput [(ngModel)]="selectedRequest.processInstanceId" />
+    </mat-form-field>
+    <mat-dialog-actions>
+      <button mat-raised-button color="primary" (click)="completeTask()">Complete</button>
+      <button mat-raised-button color="warn" (click)="displayCompleteDialog = false">Cancel</button>
+    </mat-dialog-actions>
+  </mat-dialog-content>
+</div>

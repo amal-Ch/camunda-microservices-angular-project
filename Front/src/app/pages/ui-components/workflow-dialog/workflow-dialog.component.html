@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>{{ isNewWorkflow ? 'Add Workflow' : 'Edit Workflow' }}</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Title</mat-label>
+    <input matInput [(ngModel)]="workflow.title">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Code</mat-label>
+    <input matInput [(ngModel)]="workflow.code">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Process Key</mat-label>
+    <input matInput [(ngModel)]="workflow.processKey">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()" color="primary">Cancel</button>
+  <button mat-button (click)="onSave()" color="primary">Save</button>
+</div>

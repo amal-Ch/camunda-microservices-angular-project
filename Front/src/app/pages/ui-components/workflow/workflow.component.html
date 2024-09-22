@@ -1,0 +1,41 @@
+<mat-table [dataSource]="workflows" class="mat-elevation-z8">
+  <!-- Title Column -->
+  <ng-container matColumnDef="title">
+    <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+    <mat-cell *matCellDef="let workflow"> {{workflow.title}} </mat-cell>
+  </ng-container>
+
+  <!-- Code Column -->
+  <ng-container matColumnDef="code">
+    <mat-header-cell *matHeaderCellDef> Code </mat-header-cell>
+    <mat-cell *matCellDef="let workflow"> {{workflow.code}} </mat-cell>
+  </ng-container>
+
+  <!-- Process Key Column -->
+  <ng-container matColumnDef="processKey">
+    <mat-header-cell *matHeaderCellDef> Process Key </mat-header-cell>
+    <mat-cell *matCellDef="let workflow"> {{workflow.processKey}} </mat-cell>
+  </ng-container>
+
+  <!-- Date Added Column -->
+  <ng-container matColumnDef="dateAdded">
+    <mat-header-cell *matHeaderCellDef> Date Added </mat-header-cell>
+    <mat-cell *matCellDef="let workflow"> {{workflow.dateAdded | date}} </mat-cell>
+  </ng-container>
+
+  <!-- Actions Column -->
+  <ng-container matColumnDef="action">
+    <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+    <mat-cell *matCellDef="let workflow">
+      <button mat-button (click)="editWorkflow(workflow)" color="primary">Edit</button>
+      <button mat-button (click)="deleteWorkflow(workflow.idProcess)" color="primary">Delete</button>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+<button mat-raised-button (click)="showDialogToAdd()" color="primary">Add New Workflow</button>
